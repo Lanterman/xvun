@@ -1,1 +1,16 @@
+.idea
+.pytest_cache
+.vscode
+
+__pycache__
+
 venv
+db.slqite3
+media
+
+apps/main/migrations/*
+apps/user/migrations/*
+!apps/main/migrations/__init__.py
+!apps/user/migrations/__init__.py
+
+htmlcov
