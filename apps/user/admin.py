@@ -8,7 +8,7 @@ from .auth import models as auth_models
 
 @admin.register(models.User)
 class UserAdmin(admin.ModelAdmin):
-    """Lobby admin"""
+    """User admin"""
 
     list_display = ("id", "username", "first_name", "last_name", "email", "created_in", "is_active", "is_staff")
     list_display_links = ("id", "username", "first_name", "last_name")
@@ -58,7 +58,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(auth_models.SecretKey)
 class SecretKeyAdmin(admin.ModelAdmin):
-    """Lobby admin"""
+    """SecretKey admin"""
 
     list_display = ("id", "user", "created")
     list_display_links = ("id", "user", "created")
@@ -69,7 +69,7 @@ class SecretKeyAdmin(admin.ModelAdmin):
 
 @admin.register(auth_models.JWTToken)
 class JWTTokenAdmin(admin.ModelAdmin):
-    """Lobby admin"""
+    """JWTToken admin"""
 
     list_display = ("id", "user", "created")
     list_display_links = ("id", "user", "created")

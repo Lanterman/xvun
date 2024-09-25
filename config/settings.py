@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     # Apps
-    # 'apps.main.apps.MainConfig',
+    'apps.main.apps.MainConfig',
     'apps.user.apps.UserConfig',
 ]
 
