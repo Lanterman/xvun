@@ -1,0 +1,129 @@
+[
+    {
+        "model": "user.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$Y3k9VgvSWahH5B1Hnhx4Jj$FWBCvZYz79au/4rMrZWjZUb9SfN61b2xBrYv9V49gc4=",
+            "last_login": "2023-04-13T16:00:23.175Z",
+            "is_superuser": true,
+            "username": "admin",
+            "first_name": "admin",
+            "last_name": "Dima",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-04-03T15:35:40.133Z",
+            "created_in": "2023-04-03T15:35:40.354Z",
+            "email": "admin@mail.ru",
+            "hashed_password": "KtQrvyHOiHFU$b18f34385035abe98c305d63d2121ff72a8bca7385a7d217d1891a1c43d397ae",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$hV4dwnnvZKaRkAoKNoI1I0$gtviiAmetarJ9tH1pKbHQPpYI3RNt5/03acTeNESHCM=",
+            "last_login": null,
+            "is_superuser": true,
+            "username": "lanterman",
+            "first_name": "Dima",
+            "last_name": "kliv",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-04-03T15:36:24.376Z",
+            "created_in": "2023-04-03T15:36:24.599Z",
+            "email": "kliv@mail.ru",
+            "hashed_password": "iEmhsIVjCkVh$19b074e240f28205f2bb2304d1e72f3257334dd9e4879392f527d40a8e4db9cb",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 3,
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "user",
+            "first_name": "test",
+            "last_name": "user",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-04-08T07:12:24.790Z",
+            "created_in": "2023-04-08T07:12:24.792Z",
+            "email": "user123@mail.ru",
+            "hashed_password": "iEmhsIVjCkVh$19b074e240f28205f2bb2304d1e72f3257334dd9e4879392f527d40a8e4db9cb",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 4,
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "no_activate",
+            "first_name": "test",
+            "last_name": "user",
+            "is_staff": true,
+            "is_active": false,
+            "date_joined": "2023-04-08T07:12:24.790Z",
+            "created_in": "2023-04-08T07:12:24.792Z",
+            "email": "no_activate@mail.ru",
+            "hashed_password": "HQhKrDbBlEBC$a518bdf8a95d3cf92f8a05fa96e713c5ecb64144607feefaccead08544108a3e",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.jwttoken",
+        "pk": 1,
+        "fields": {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjUsInR5cGVfdG9rZW4iOiJhY2Nlc3MifQ.CAVyfY41h7Q6xzfR5jEtQGC1bcMFFkbd-OGrdiARVWI",
+            "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjUsInR5cGVfdG9rZW4iOiJyZWZyZXNoIn0.40Dbt1BJn9hp7dPAkCTUDohL9B5Sjn-4xIXdLsvF_eU",
+            "created": "2024-09-26T20:37:57.710Z",
+            "user": 3
+        }
+    },
+    {
+        "model": "user.jwttoken",
+        "pk": 2,
+        "fields": {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c21yX2lkIjoxMjUsInR5cGVfdG9rZW4iOiJhY2Nlc3MifQ.CAVyfY41h7Q6xzfR5jEtQGC1bcMFFkbd-OGrdiARVWI",
+            "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lk1joxMjUsInR5cGVfdG9rZW4iOiJyZWZyZXNoIn0.40Dbt1BJn9hp7dPAkCTUDohL9B5Sjn-4xIXdLsvF_eU",
+            "created": "2022-08-19T20:37:57.710Z",
+            "user": 4
+        }
+    },
+    {
+        "model": "user.secretkey",
+        "pk": 1,
+        "fields": {
+            "key": "35a97667edaa49e839eb47e3409005e66bf2816a4ce59fbf88af7f0a1b38b71f",
+            "created": "2023-07-17T20:37:57.634Z",
+            "user": 2
+        }
+    },
+    {
+        "model": "user.secretkey",
+        "pk": 2,
+        "fields": {
+            "key": "df748b39b06e8589970dd10d33c8112988884f1002d61fd3774d05365008a643",
+            "created": "2023-07-17T20:37:57.634Z",
+            "user": 3
+        }
+    },
+    {
+        "model": "user.secretkey",
+        "pk": 3,
+        "fields": {
+            "key": "df748b39b06e8589970dd10133c8112988884f1002d61fd3774d05365008a643",
+            "created": "2023-07-17T20:37:57.634Z",
+            "user": 4
+        }
+    }
+]
