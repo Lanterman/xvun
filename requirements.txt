@@ -16,5 +16,9 @@ setuptools==75.1.0
 sqlparse==0.5.1
 uritemplate==4.1.1
 
+beautifulsoup4==4.12.3 
+opengraph_py3==0.71 
+soupsieve==2.6
+
 pytest==8.3.3
 pytest-django==4.9.0

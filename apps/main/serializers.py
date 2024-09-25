@@ -3,12 +3,21 @@ from rest_framework import serializers
 from . import models
 
 
-class CollectionSerializer(serializers.ModelSerializer):
-    """Collection serializer"""
+class BaseCollectionSerializer(serializers.ModelSerializer):
+    """Base collection serializer"""
 
     class Meta:
         model = models.Collection
         fields = ("id", "name", "description", "created_in", "updated_in")
+
+
+class BaseLinkSerializer(serializers.ModelSerializer):
+    """Base link serializer"""
+
+    class Meta:
+        model = models.Link
+        fields = ("id", "title", "description", "link", "image", "type_of_link", 
+                  "created_in", "updated_in")
 
 
 class ListLinkSerializer(serializers.ModelSerializer):
@@ -30,7 +39,7 @@ class CreateLinkSerializer(serializers.ModelSerializer):
 class LinkSerializer(serializers.ModelSerializer):
     """Link serializer"""
 
-    collections = CollectionSerializer(many=True, read_only=True)
+    collections = BaseCollectionSerializer(many=True)
 
     class Meta:
         model = models.Link
@@ -43,4 +52,30 @@ class UpdateLinkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Link
-        fields = ["title", "description", "link", "image", "collections"]
+        fields = ["title", "description", "image", "collections"]
+
+
+class CollectionSerializer(serializers.ModelSerializer):
+    """Collection serializer"""
+
+    links = BaseLinkSerializer(many=True)
+
+    class Meta:
+        model = models.Collection
+        fields = ("id", "name", "description", "created_in", "updated_in", "links")
+
+
+class CreateCollectionSerializer(serializers.ModelSerializer):
+    """Create collection serializer"""
+
+    class Meta:
+        model = models.Collection
+        fields = ["name", "description"]
+
+
+class UpdateCollectionSerializer(serializers.ModelSerializer):
+    """Update collection serializer"""
+
+    class Meta:
+        model = models.Collection
+        fields = ["name", "description"]

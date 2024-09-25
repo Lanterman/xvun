@@ -16,8 +16,8 @@ User = settings.AUTH_USER_MODEL
 class Collection(models.Model):
     """Collection model"""
 
-    name: str = models.CharField(_("name"), max_length=100, help_text="Required.")
-    description: str = models.CharField(_("description"), max_length=250, help_text="Required.", blank=True)
+    name: str = models.CharField(_("name"), max_length=100, help_text="Required.", unique=True)
+    description: str = models.CharField(_("description"), max_length=250, blank=True)
     created_in: datetime.datetime = models.DateTimeField(auto_now_add=True)
     updated_in: datetime.datetime = models.DateTimeField(blank=True, null=True)
     user_id = models.ForeignKey(to=User, verbose_name="user", on_delete=models.CASCADE, related_name="collection_set")
@@ -46,7 +46,7 @@ class Link(models.Model):
     updated_in: datetime.datetime = models.DateTimeField(blank=True, null=True)
     user_id = models.ForeignKey(to=User, verbose_name="user", on_delete=models.CASCADE, related_name="link_set")
     collections: Optional[list[Collection]] = models.ManyToManyField(to=Collection, related_name="links", 
-                                                                     help_text="Required")
+                                                                     help_text="Required", blank=True, null=True)
 
     class Meta:
         verbose_name = _("Link")
