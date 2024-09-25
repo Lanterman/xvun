@@ -1,14 +1,13 @@
-import re
-
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
-from rest_framework import generics, response, status, views, decorators
+from rest_framework import generics, response, status, views
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 
 from . import models, serializers, services, permissions, db_queries
+from .celery_tasks import send_reset_password
 from config import settings
 
 
@@ -148,16 +147,16 @@ class ResetPasswordView(generics.UpdateAPIView):
     def update(self, request, *args, **kwargs):
         user_id_by_secret_key = db_queries.get_user_id_by_secret_key(request.path.split("/")[-2])
         if user_id_by_secret_key is None:
-            raise ValidationError(detail={"Detail": "Incorrect secret_key."}, code=status.HTTP_400_BAD_REQUEST)
+            raise AuthenticationFailed(_("No user with such secret key."))
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         hashed_password = services.create_hashed_password(serializer.data["new_password"])
-        self.perform_update(hashed_password)
+        self.perform_update(user_id_by_secret_key, hashed_password)
         return response.Response({"new_password": hashed_password}, status=status.HTTP_200_OK)
 
-    def perform_update(self, hashed_password: str):
-        db_queries.change_password(self.request.user.id, hashed_password)
+    def perform_update(self, user_id: int, hashed_password: str):
+        db_queries.change_password(user_id, hashed_password)
 
 
 @method_decorator(name="put", decorator=swagger_auto_schema(tags=["profile"]))
@@ -182,3 +181,30 @@ class ChangePasswordView(generics.UpdateAPIView):
 
     def perform_update(self, hashed_password: str):
         db_queries.change_password(self.request.user.id, hashed_password)
+
+
+class TryToResetPasswordView(generics.CreateAPIView):
+    """Try to reset password - endpoint"""
+
+    serializer_class = serializers.TryToResetPasswordSerializer
+    authentication_classes = []
+
+    @swagger_auto_schema(tags=["profile"])
+    def post(self, request, format=None):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid()
+
+        error = AuthenticationFailed(_("No user with such email."))
+        user = db_queries.get_user_by_email(request.data["email"])
+        
+        if user is None:
+            raise error
+
+        secret_key = db_queries.get_secret_key(user.id)
+
+        if secret_key is None:
+            raise error
+
+        send_reset_password.delay(user.email, secret_key.key)
+
+        return response.Response({"detail": "Check you email."}, status=status.HTTP_200_OK)

@@ -301,3 +301,11 @@ class ResetPasswordSerializer(serializers.ModelSerializer, ValidateClass):
             raise serializers.ValidationError(detail="Password mismatch!", code=status.HTTP_400_BAD_REQUEST)
 
         return value
+
+
+class TryToResetPasswordSerializer(serializers.ModelSerializer):
+    """Try to reset a user account password"""
+
+    class Meta:
+        model = models.User
+        fields = ["email"]

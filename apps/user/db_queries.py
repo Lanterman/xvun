@@ -47,6 +47,13 @@ def logout(instance: auth_models.JWTToken) -> None:
 
 
 # action with SecretKey model instance
+def get_secret_key(user_id: int) -> auth_models.SecretKey:
+    """Get secret key by user id"""
+
+    query = auth_models.SecretKey.objects.filter(user=user_id)
+    return None if not query else query[0]
+
+
 def create_user_secret_key(secret_key: str, user_id: int) -> None:
     """Create user secret key to SecretKey model"""
 

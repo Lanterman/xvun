@@ -37,11 +37,41 @@ services:
       - POSTGRES_PASSWORD=postgres
     depends_on:
       - postgres_db
+      - redis
     container_name: backend
+  
+  redis:
+    image: redis:5
+    restart: always
+    command: "redis-server"
+    ports:
+      - "6379:6379"
+    container_name: redis
+    volumes:
+      - redis_data:/app/backend/var/lib/redis/data
+    networks:
+      - XvunNetwork
+  
+  celery:
+    build: .
+    restart: always
+    command: "celery -A config worker -l INFO"
+    volumes:
+      - celery_data:/app/backend/var/lib/celery/data
+    networks:
+      - XvunNetwork
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - backend
+      - redis
+    container_name: celery
 
 volumes:
   postgres_data:
   backend_media_data:
+  redis_data:
+  celery_data:
 
 networks:
   XvunNetwork:

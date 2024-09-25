@@ -46,7 +46,7 @@ class Link(models.Model):
     updated_in: datetime.datetime = models.DateTimeField(blank=True, null=True)
     user_id = models.ForeignKey(to=User, verbose_name="user", on_delete=models.CASCADE, related_name="link_set")
     collections: Optional[list[Collection]] = models.ManyToManyField(to=Collection, related_name="links", 
-                                                                     help_text="Required", blank=True, null=True)
+                                                                     help_text="Required", blank=True)
 
     class Meta:
         verbose_name = _("Link")
