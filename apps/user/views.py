@@ -70,7 +70,7 @@ class SignUpView(generics.CreateAPIView):
 class SignOutView(views.APIView):
     """Sign out (delete authentication jwt token) endpoint"""
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, permissions.IsAccountOwner]
     
     @swagger_auto_schema(responses={204: '{"detail": "Successfully logged out."}'}, tags=["auth"])
     def delete(self, request, format=None):
@@ -136,19 +136,42 @@ class RefreshTokenView(generics.CreateAPIView):
 
 
 @method_decorator(name="put", decorator=swagger_auto_schema(tags=["profile"]))
+class ResetPasswordView(generics.UpdateAPIView):
+    """Cahnge a user account password endpoint"""
+
+    queryset = models.User.objects.all()
+    permission_classes = []
+    serializer_class = serializers.ResetPasswordSerializer
+    http_method_names = ["put", "head", "options", "trace"]
+    lookup_field = "email"
+
+    def update(self, request, *args, **kwargs):
+        user_id_by_secret_key = db_queries.get_user_id_by_secret_key(request.path.split("/")[-2])
+        if user_id_by_secret_key is None:
+            raise ValidationError(detail={"Detail": "Incorrect secret_key."}, code=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        hashed_password = services.create_hashed_password(serializer.data["new_password"])
+        self.perform_update(hashed_password)
+        return response.Response({"new_password": hashed_password}, status=status.HTTP_200_OK)
+
+    def perform_update(self, hashed_password: str):
+        db_queries.change_password(self.request.user.id, hashed_password)
+
+
+@method_decorator(name="put", decorator=swagger_auto_schema(tags=["profile"]))
 class ChangePasswordView(generics.UpdateAPIView):
     """Cahnge a user account password endpoint"""
 
     queryset = models.User.objects.all()
-    permission_classes = [permissions.IsAccountOwner]
+    permission_classes = [permissions.IsAccountOwner, IsAuthenticated]
     serializer_class = serializers.ChangePasswordSerializer
     http_method_names = ["put", "head", "options", "trace"]
     lookup_field = "username"
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-
-        if not services.validate_password(request.data["old_password"], instance.hashed_password):
+        if not services.validate_password(request.data["old_password"], request.user.hashed_password):
             raise ValidationError(detail={"old_password": "Incorrect old password."}, code=status.HTTP_400_BAD_REQUEST)
 
         serializer = self.get_serializer(data=request.data)
