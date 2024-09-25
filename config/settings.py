@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     # Apps
-    'apps.main.apps.MainConfig',
+    # 'apps.main.apps.MainConfig',
     'apps.user.apps.UserConfig',
 ]
 
@@ -168,14 +168,13 @@ AUTH_USER_MODEL = "user.User"
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 15,
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     # Custom auth by JWTToken
-    #     'src.user.auth.backends.JWTTokenAuthBackend',
-    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # Custom auth by JWTToken
+        'apps.user.auth.backends.JWTTokenAuthBackend',
+    ),
     # 'DEFAULT_THROTTLE_RATES': {
     #     'user': '2/min'
     # },
-    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'DEFAULT_VERSION': 'v1.0.0',
     'ALLOWED_VERSIONS': ('v1.0.0',),
     'DATETIME_FORMAT': '%d.%m.%Y %H:%M:%S',
@@ -187,15 +186,15 @@ REST_FRAMEWORK = {
 # Swagger settings
 
 SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': True,
-    # 'USE_SESSION_AUTH': False,
-    # 'SECURITY_DEFINITIONS': {
-    #     'Bearer': {
-    #         'type': 'apiKey',
-    #         'name': 'Authorization',
-    #         'in': 'header'
-    #     }
-    # }
+    # 'USE_SESSION_AUTH': True,
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }
 
 

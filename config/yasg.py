@@ -5,6 +5,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from . import settings
+from apps.user.auth.backends import JWTTokenAuthBackend
 
 
 AUTH_HEADER_TYPES = settings.JWT_SETTINGS["AUTH_HEADER_TYPES"]
@@ -19,16 +20,16 @@ schema_view = get_schema_view(
    openapi.Info(
       title="XVUN test",
       default_version=api_settings.DEFAULT_VERSION,
-    #   description=(
-    #       f"For authenticated requests, create a user and enter the resulting token along with the word '{AUTH_HEADER_TYPES}'."
-    #       f"Example: '{AUTH_HEADER_TYPES} d8175af2fac77d4ee16b984769a7251775e6be48'."),
+      description=(
+          f"For authenticated requests, create a user and enter the resulting token along with the word '{AUTH_HEADER_TYPES}'."
+          f"Example: '{AUTH_HEADER_TYPES} d8175af2fac77d4ee16b984769a7251775e6be48'."),
       license=openapi.License(name="BSD License"),
       contact=contact,
    ),
    public=True,
    patterns=schema_url_patterns,
    permission_classes=[permissions.AllowAny],
-#    authentication_classes=[JWTTokenAuthBackend]
+   authentication_classes=[JWTTokenAuthBackend]
 )
 
 urlpatterns = [
