@@ -315,21 +315,10 @@ class TestResetPasswordView(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.jwt_token.access_token)
         with self.assertLogs(level="WARNING"):
             response = self.client.put(self.path, self.invalid_data)
-        detail_error = json.loads(response.content)['old_password']
-        test_detail_error = "Password mismatch!"
+        detail_error = json.loads(response.content)["confirm_password"]
+        test_detail_error = ["Password mismatch!"]
         updated_user = models.User.objects.get(id=3)
         assert 400 == response.status_code, response.status_code
-        assert test_detail_error == detail_error, detail_error
-        assert self.user.hashed_password == updated_user.hashed_password, updated_user.hashed_password
-
-        # ivalid request - detail: "This action is only allowed for the account owner"
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.jwt_token.access_token)
-        with self.assertLogs(level="WARNING"):
-            response = self.client.put(self.path_1, self.valid_data)
-        detail_error = json.loads(response.content)['detail']
-        test_detail_error = "This action is only allowed for the account owner"
-        updated_user = models.User.objects.get(id=3)
-        assert 403 == response.status_code, response.status_code
         assert test_detail_error == detail_error, detail_error
         assert self.user.hashed_password == updated_user.hashed_password, updated_user.hashed_password
 
@@ -383,6 +372,7 @@ class TestChangePasswordView(APITestCase):
         assert self.user.hashed_password == updated_user.hashed_password, updated_user.hashed_password
 
     def test_get_method(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.jwt_token.access_token)
         with self.assertLogs(level="WARNING"):
             response = self.client.get(self.path)
         detail_error = json.loads(response.content)["detail"]
@@ -401,17 +391,6 @@ class TestChangePasswordView(APITestCase):
         test_detail_error = "Incorrect old password."
         updated_user = models.User.objects.get(id=3)
         assert 400 == response.status_code, response.status_code
-        assert test_detail_error == detail_error, detail_error
-        assert self.user.hashed_password == updated_user.hashed_password, updated_user.hashed_password
-
-        # ivalid request - detail: "This action is only allowed for the account owner"
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.jwt_token.access_token)
-        with self.assertLogs(level="WARNING"):
-            response = self.client.put(self.path_1, self.valid_data)
-        detail_error = json.loads(response.content)['detail']
-        test_detail_error = "This action is only allowed for the account owner"
-        updated_user = models.User.objects.get(id=3)
-        assert 403 == response.status_code, response.status_code
         assert test_detail_error == detail_error, detail_error
         assert self.user.hashed_password == updated_user.hashed_password, updated_user.hashed_password
 

@@ -3,7 +3,7 @@ import json
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIRequestFactory, APIClient
 
-from apps.user import models, services
+from apps.user import models, services, auth
 from config import settings
 
 
@@ -56,11 +56,11 @@ class TestResetPasswordViewPermission(APITestCase):
 
         cls.user = models.User.objects.get(id=3)
         cls.token = services.create_jwttoken(cls.user.id)
+        cls.secret_key = auth.models.SecretKey.objects.get(id=2)
 
         cls.request = APIRequestFactory()
         cls.client = APIClient()
-        cls.url_1 = reverse('change-password', kwargs={"username": cls.user.username})
-        cls.url_2 = reverse('change-password', kwargs={"username": "admin"})
+        cls.url_1 = reverse("reset-password", kwargs={"email": cls.user.email, 'secret_key': cls.secret_key.key})
         
         cls.type_token = settings.JWT_SETTINGS["AUTH_HEADER_TYPES"]
 
@@ -69,17 +69,9 @@ class TestResetPasswordViewPermission(APITestCase):
 
         self.client.credentials(HTTP_AUTHORIZATION=f'{self.type_token} {self.token.access_token}')
         data = {
-            "old_password": "karmavdele2",
             "new_password": "karmavdele1",
             "confirm_password": "karmavdele1"
         }
 
         valid_response_put = self.client.put(path=self.url_1, data=data)
         assert valid_response_put.status_code == 200, valid_response_put.status_code
-
-        with self.assertLogs(level="WARNING"):
-            invalid_response_put = self.client.put(path=self.url_2)
-        detail_error = json.loads(invalid_response_put.content)["detail"]
-        assert invalid_response_put.status_code == 403, invalid_response_put.status_code
-        assert detail_error == "This action is only allowed for the account owner", detail_error
-

@@ -164,7 +164,7 @@ class ChangePasswordView(generics.UpdateAPIView):
     """Cahnge a user account password endpoint"""
 
     queryset = models.User.objects.all()
-    permission_classes = [permissions.IsAccountOwner, IsAuthenticated]
+    permission_classes = [IsAuthenticated, permissions.IsAccountOwner]
     serializer_class = serializers.ChangePasswordSerializer
     http_method_names = ["put", "head", "options", "trace"]
     lookup_field = "username"
