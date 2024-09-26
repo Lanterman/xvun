@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from . import models
+from apps.user.models import User
 
 
 class BaseCollectionSerializer(serializers.ModelSerializer):
@@ -79,3 +80,16 @@ class UpdateCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Collection
         fields = ["name", "description"]
+
+
+class SQLRequestSerializer(serializers.ModelSerializer):
+    """SQL request serializer"""
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "created_in"]
+    
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret["count_links"] = instance.count_links
+        return ret

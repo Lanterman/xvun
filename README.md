@@ -1,12 +1,12 @@
 # Xvun -test
 
-Coverage of the project with tests - 99%.
+There was not enough time to cover the entire project with tests.
 
 ### Launch of the project
 
 #### 1) Clone repositories
 ```
-git clone https://github.com/Lanterman/xvun_test.git
+git clone https://github.com/Lanterman/xvun.git
 ```
 #### 2) Create and run docker-compose
 ```
@@ -26,3 +26,9 @@ docker exec -it <backend_container_ID> python manage.py createsuperuser
     ```
     http://127.0.0.1:8000/api/v1/
     ```
+   
+P.S.
+Before resetting "auth/reset_password/{email}/{secret_key}/" password, you must request it from "/auth/profile/try_to_reset_password/" endpoint.
+
+P.S.S
+To load test data use "/add_test_data/" endpoint.

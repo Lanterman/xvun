@@ -21,6 +21,7 @@ redis==5.0.8
 beautifulsoup4==4.12.3 
 opengraph_py3==0.71 
 soupsieve==2.6
+mureq==0.2.0
 
 pytest==8.3.3
 pytest-django==4.9.0

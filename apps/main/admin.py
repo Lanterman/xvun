@@ -9,8 +9,8 @@ from . import models
 class CollectionAdmin(admin.ModelAdmin):
     """Collection admin"""
 
-    list_display = ("id", "name", "created_in")
-    list_display_links = ("id", "name", "created_in")
+    list_display = ("id", "name", "user_id", "created_in")
+    list_display_links = ("id", "name", "user_id", "created_in")
     fields = ("name", "description", "updated_in", "user_id")
     search_fields = ("name", )
     list_max_show_all = 250
@@ -21,8 +21,8 @@ class CollectionAdmin(admin.ModelAdmin):
 class LinkAdmin(admin.ModelAdmin):
     """Link admin"""
 
-    list_display = ("id", "title", "type_of_link", "created_in")
-    list_display_links = ("id", "title", "type_of_link", "created_in")
+    list_display = ("id", "title", "user_id", "type_of_link", "created_in")
+    list_display_links = ("id", "title", "user_id", "type_of_link", "created_in")
     fields = ("title", "description", "link", "image", "type_of_link", 
               "updated_in", "user_id", "collections")
     search_fields = ("title ", )

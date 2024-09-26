@@ -272,6 +272,78 @@ class TestRefreshTokenView(APITestCase):
         assert test_detail_error == detail_error, detail_error
 
 
+class TestResetPasswordView(APITestCase):
+    """Testing ResetPasswordView class methods"""
+
+    fixtures = ["./config/test/test_data.json"]
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        super().setUpClass()
+
+        cls.user = models.User.objects.get(id=3)
+        cls.user_1 = models.User.objects.get(id=1)
+        cls.jwt_token = auth_models.JWTToken.objects.get(id=1)
+        cls.secret_key = auth_models.SecretKey.objects.get(id=2)
+        cls.secret_key_1 = auth_models.SecretKey.objects.get(id=1)
+
+        cls.client = APIClient()
+
+        cls.path = reverse("reset-password", kwargs={"email": cls.user.email, 'secret_key': cls.secret_key.key})
+        cls.path_1 = reverse("reset-password", kwargs={"email": cls.user_1.email, "secret_key": cls.secret_key_1.key})
+        cls.valid_data = {
+            "new_password": "karmavdele1",
+            "confirm_password": "karmavdele1"
+        }
+        cls.invalid_data = {
+            "new_password": "karmavdele11",
+            "confirm_password": "karmavdele1"
+        }
+
+    def test_get_method(self):
+        with self.assertLogs(level="WARNING"):
+            response = self.client.get(self.path)
+        detail_error = json.loads(response.content)["detail"]
+        test_detail_error = 'Method "GET" not allowed.'
+        updated_user = models.User.objects.get(id=3)
+        assert 405 == response.status_code, response.status_code
+        assert test_detail_error == detail_error, detail_error
+        assert self.user.hashed_password == updated_user.hashed_password, updated_user.hashed_password
+    
+    def test_put_method(self):
+        # ivalid request - detail: "Password mismatch!"
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.jwt_token.access_token)
+        with self.assertLogs(level="WARNING"):
+            response = self.client.put(self.path, self.invalid_data)
+        detail_error = json.loads(response.content)['old_password']
+        test_detail_error = "Password mismatch!"
+        updated_user = models.User.objects.get(id=3)
+        assert 400 == response.status_code, response.status_code
+        assert test_detail_error == detail_error, detail_error
+        assert self.user.hashed_password == updated_user.hashed_password, updated_user.hashed_password
+
+        # ivalid request - detail: "This action is only allowed for the account owner"
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.jwt_token.access_token)
+        with self.assertLogs(level="WARNING"):
+            response = self.client.put(self.path_1, self.valid_data)
+        detail_error = json.loads(response.content)['detail']
+        test_detail_error = "This action is only allowed for the account owner"
+        updated_user = models.User.objects.get(id=3)
+        assert 403 == response.status_code, response.status_code
+        assert test_detail_error == detail_error, detail_error
+        assert self.user.hashed_password == updated_user.hashed_password, updated_user.hashed_password
+
+         # valid request - code 200
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + f"{self.jwt_token.access_token}")
+        response = self.client.put(self.path, self.valid_data)
+        response_data = json.loads(response.content)
+        updated_user = models.User.objects.get(id=3)
+        assert 200 == response.status_code, response.status_code
+        assert "new_password" in response_data, response_data
+        assert self.user.hashed_password != updated_user.hashed_password, updated_user.hashed_password
+
+
+
 class TestChangePasswordView(APITestCase):
     """Testing ChangePasswordView class methods"""
 

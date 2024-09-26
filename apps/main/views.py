@@ -1,11 +1,13 @@
+from django.db.models import Max, Count
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
-from rest_framework import generics, response, status
+from rest_framework import generics, response, status, decorators
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 
-from . import models, serializers, permissions, services
+from . import models, serializers, permissions, services, add_test_data
+from apps.user.models import User
 
 
 @method_decorator(name="get", decorator=swagger_auto_schema(tags=["link"]))
@@ -105,3 +107,22 @@ class CollectionView(generics.RetrieveUpdateDestroyAPIView):
     
     def perform_update(self, serializer):
         serializer.save(updated_in = timezone.now())
+
+
+@decorators.api_view(["GET"])
+def add_test_data_for_testing(request):
+    """Add test data for testing the project"""
+
+    add_test_data.add_test_data()
+    return response.Response({"detail": "Test data added successfully."})
+
+
+@decorators.api_view(["GET"])
+def sql_request(request):
+    """SQL request"""
+
+    users = User.objects.all().prefetch_related("link_set").annotate(count_links=Count("link_set")).order_by(
+        "-count_links", "created_in")[:10]
+    
+    serializer = serializers.SQLRequestSerializer(users, many=True)
+    return response.Response(serializer.data)
