@@ -33,3 +33,5 @@ Before resetting "auth/reset_password/{email}/{secret_key}/" password, you must 
 
 P.S.S
 To load test data use "/add_test_data/" endpoint.
+
+Due to the poor choice of library for retrieving site pages and the lack of asynchrony, the process may take some time.

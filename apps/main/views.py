@@ -1,8 +1,10 @@
-from django.db.models import Max, Count
+from urllib.error import HTTPError
+
+from django.db.models import Count
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
-from rest_framework import generics, response, status, decorators
+from rest_framework import generics, response, status, decorators, exceptions
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 
@@ -27,11 +29,15 @@ class ListLinkView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer = services.add_data_by_link(serializer, request.user)
+
+        try:
+            serializer = services.add_data_by_link(serializer, request.user)
+        except HTTPError:
+            raise exceptions.PermissionDenied("This site has prohibited this action")
+    
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
 
 
 @method_decorator(name="get", decorator=swagger_auto_schema(tags=["link"]))

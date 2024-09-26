@@ -38,12 +38,6 @@ test_links = [
     "https://www.tensorflow.org/tutorials/keras/regression#linear_regression_with_multiple_inputs",
     "https://habr.com/ru/articles/770554/",
     "https://www.django-rest-framework.org/",
-    "https://www.google.com/imgres?q=photo&imgurl=https%3A%2F%2Fimages.pexels.com%2Fphotos%2F1416736%2Fpexels-photo-1416736.jpeg%3Fcs%3Dsrgb%26dl%3Dpexels-jonas-mohamadi-1416736.jpg%26fm%3Djpg&imgrefurl=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fkids%2F&docid=gYSZtCKuC-swdM&tbnid=1cSdnQcfm0_VCM&vet=12ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECGMQAA..i&w=4912&h=7360&hcb=2&ved=2ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECGMQAA",
-    "https://www.google.com/imgres?q=photo&imgurl=https%3A%2F%2Fwww.befunky.com%2Fimages%2Fprismic%2F32083dff-734b-49a7-bb4d-c0dc512401af_hero-photo-effects-5.jpg%3Fauto%3Davif%2Cwebp%26format%3Djpg%26width%3D896&imgrefurl=https%3A%2F%2Fwww.befunky.com%2Ffeatures%2Fphoto-effects%2F&docid=Ao1a_PBizBtlCM&tbnid=9BOR3eQgag_q4M&vet=12ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECF4QAA..i&w=896&h=504&hcb=2&ved=2ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECF4QAA",
-    "https://www.google.com/imgres?q=photo&imgurl=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2014%2F02%2F27%2F16%2F10%2Fflowers-276014_1280.jpg&imgrefurl=https%3A%2F%2Fpixabay.com%2Fphotos%2Fflowers-meadow-sunlight-summer-276014%2F&docid=wqLT8GhLsxbLDM&tbnid=vY6B1urBVzeArM&vet=12ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECFoQAA..i&w=1280&h=814&hcb=2&ved=2ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECFoQAA",
-    "https://www.google.com/imgres?q=photo&imgurl=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fthumbnails%2F026%2F829%2F465%2Fsmall%2Fbeautiful-girl-with-autumn-leaves-photo.jpg&imgrefurl=https%3A%2F%2Fwww.vecteezy.com%2Ffree-photos%2Fbeauty-girl&docid=FJws_VLfyRaiqM&tbnid=Mlm_CVVVNUDsRM&vet=12ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECGgQAA..i&w=271&h=200&hcb=2&itg=1&ved=2ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECGgQAA",
-    "https://www.google.com/imgres?q=photo&imgurl=https%3A%2F%2Fphotoscissors.com%2Fimages%2Fsamples%2F1-before.jpg&imgrefurl=https%3A%2F%2Fphotoscissors.com%2F&docid=KufthtopOq8m5M&tbnid=smPuIZrg9wkwqM&vet=12ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECCQQAA..i&w=1280&h=854&hcb=2&itg=1&ved=2ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECCQQAA",
-    "https://www.google.com/imgres?q=photo&imgurl=https%3A%2F%2Fstatic-cse.canva.com%2Fblob%2F1257263%2Ftools-feature_photo_background_change_hero_mobile.jpg&imgrefurl=https%3A%2F%2Fwww.canva.com%2Ffeatures%2Fphoto-background-changer%2F&docid=xSyf4if0KGBUWM&tbnid=MTSuwdbxO_Zz8M&vet=12ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECEMQAA..i&w=4096&h=2449&hcb=2&ved=2ahUKEwjimuPNhOCIAxWkZ0EAHXEnI4UQM3oECEMQAA"
 ]
 
 
@@ -77,8 +71,8 @@ def add_test_data():
             
             link.collections.add(collection)
         except IntegrityError:
-            logging.warn(f"This link exists. Link: {data["title"]} - {data["link"]}")
+            logging.warn(f"This link exists. Link: {data['title']} - {data['link']}")
         except HTTPError:
             continue
         except DataError as e:
-            logging.warn(f"Problem with the size of the type_of_link field. I don't know why. Link: {data["type_of_link"]}")
+            logging.warn(f"Problem with the size of the type_of_link field. I don't know why. Link: {data['type_of_link']}")
